@@ -11,6 +11,7 @@ Here are the resources used in this project:
 - Search functionality to find news by title.
 
 ## Installation
+```bash
 git clone https://github.com/thearithhoul/fast-news-app.git
 flutter pub get
 flutter run
