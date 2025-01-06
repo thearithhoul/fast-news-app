@@ -10,6 +10,12 @@ Here are the resources used in this project:
 - Displays top headlines from various sources.
 - Search functionality to find news by title.
 
+# Screenshots
+![Home Screen](screenShot/screenshot-1.jpg)
+![Detail-news Screen](screenShot/screenshot-2.jpg)
+![Search Screen](screenShot/screenshot-3.jpg)
+
+
 ## Installation
 ```bash
 git clone https://github.com/thearithhoul/fast-news-app.git
