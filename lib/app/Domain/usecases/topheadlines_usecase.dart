@@ -11,10 +11,12 @@ class TopheadlinesUsecase {
     _topheadlinesRepository = TopheadlinesRepository();
   }
 
-  Future<ApiResult<List<Everything>>> getRecommendationLocalNews(
-      {String? category}) async {
+  Future<ApiResult<List<Everything>>> getRecommendationLocalNews({
+    String? category,
+    String? country,
+  }) async {
     ApiResult<List<Everything>> data = await _topheadlinesRepository
-        .getTopheadsNews(country: 'us', category: category);
+        .getTopheadsNews(country: country ?? 'us', category: category);
 
     return data.when(
       success: (data) async {

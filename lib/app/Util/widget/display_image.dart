@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fast_news_application/Core/Constants/image_constants.dart';
 import 'package:flutter/material.dart';
 
 class DisplayImage extends StatelessWidget {
@@ -11,14 +12,24 @@ class DisplayImage extends StatelessWidget {
       height: 120,
       width: 120,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        image: DecorationImage(
+        borderRadius: BorderRadius.circular(25),
+      ),
+      clipBehavior: Clip.hardEdge,
+      child: CachedNetworkImage(
+        cacheKey: urlImage,
+        useOldImageOnUrlChange: true,
+        imageUrl: urlImage,
+        placeholder: (context, url) => Image.asset(
+          ImageConstants.defaultImage,
           fit: BoxFit.fitHeight,
-          image: CachedNetworkImageProvider(
-            cacheKey: urlImage,
-            urlImage,
-          ),
         ),
+        errorWidget: (context, url, error) {
+          return Image.asset(
+            ImageConstants.defaultImage,
+            fit: BoxFit.fitHeight,
+          );
+        },
+        fit: BoxFit.fitHeight,
       ),
     );
   }

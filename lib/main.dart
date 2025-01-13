@@ -1,6 +1,7 @@
 import 'package:fast_news_application/app/UI/Home_screen/provider/home_provider.dart';
 import 'package:fast_news_application/app/UI/news_detail_screen/news_detail_provider.dart';
 import 'package:fast_news_application/app/UI/search_screen/search_provider.dart';
+import 'package:fast_news_application/app/Util/language.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +29,9 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (context) => SearchProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => Language(),
       ),
     ],
     child: const MainApp(),

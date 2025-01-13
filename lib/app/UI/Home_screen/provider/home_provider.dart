@@ -9,13 +9,19 @@ class HomeProvider extends ChangeNotifier {
   List<Everything> _topNews = [];
   List<Everything> get topNews => _topNews;
 
-  void callEverythingNews() async {
+  Future<void> callTopHeadlineNews(
+      {String? country, bool isBuildInit = true}) async {
     resultState = const ResultState.loading();
-    _topheadlinesUsecase.getRecommendationLocalNews().then(
+    if (!isBuildInit) {
+      notifyListeners();
+    }
+    await _topheadlinesUsecase
+        .getRecommendationLocalNews(country: country)
+        .then(
       (value) {
         value.when(
-          success: (data) async {
-            _topNews = data.sublist(0, 5);
+          success: (data) {
+            _topNews = data.length >= 5 ? data.sublist(0, 5) : data;
             resultState = ResultState.data(data);
             notifyListeners();
           },

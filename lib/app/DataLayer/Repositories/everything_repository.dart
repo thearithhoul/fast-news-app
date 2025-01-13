@@ -4,22 +4,15 @@ import 'package:fast_news_application/app/DataLayer/Repositories/base_repository
 import 'package:fast_news_application/app/Entities/everything_model/everything.dart';
 import 'package:fast_news_application/app/Entities/network_model/api_result.dart';
 
-import '../../helper/str_helper.dart';
-
 class EverythingRepository extends BaseRepository {
   Future<ApiResult<List<Everything>>> getEverythingNews({
     String? search,
     String? language,
     int? pageSize,
   }) async {
-    String quarry = StrHelper.attributesStr({
-      "language": language,
-      "q": "+$search",
-      "pageSize": pageSize,
-    });
-
+    Map<String, dynamic> param = _qurreyParam(language, search, pageSize);
     try {
-      final response = await dioClient.get('/everything?$quarry');
+      final response = await dioClient.get('/everything', param: param);
       Map<String, dynamic> map = response.data;
       String? status = map['status'];
       if (status == "ok") {
@@ -39,4 +32,25 @@ class EverythingRepository extends BaseRepository {
       return ApiResult.failure(e.toString());
     }
   }
+}
+
+Map<String, dynamic> _qurreyParam(
+  String? language,
+  String? keyword,
+  int? pageSize,
+) {
+  Map<String, dynamic> map = {};
+
+  if (language != null && language != "") {
+    map['language'] = language;
+  }
+
+  if (keyword != null && keyword != "") {
+    map['q'] = "+$keyword";
+  }
+  if (pageSize != null && pageSize != 0) {
+    map['pageSize'] = pageSize;
+  }
+
+  return map;
 }

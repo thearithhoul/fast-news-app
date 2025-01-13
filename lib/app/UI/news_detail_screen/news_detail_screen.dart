@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../Core/Constants/icon_constants.dart';
+import '../../../Core/Constants/image_constants.dart';
 import '../../Util/widget/circle_button.dart';
 
 class NewsDetailScreen extends StatefulWidget {
@@ -89,26 +90,39 @@ class _NewsDetailScreenState extends State<NewsDetailScreen>
                   width: MediaQuery.of(context).size.width,
                   child: Stack(
                     children: [
-                      Container(
+                      SizedBox(
                         height: 350,
                         width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: Colors.amber,
-                          image: DecorationImage(
-                            fit: BoxFit.fitHeight,
-                            image: CachedNetworkImageProvider(
-                              cacheKey: model.urlToImage,
-                              model.urlToImage,
+                        child: Stack(
+                          children: [
+                            SizedBox(
+                              height: 350,
+                              child: CachedNetworkImage(
+                                cacheKey: model.urlToImage,
+                                useOldImageOnUrlChange: true,
+                                imageUrl: model.urlToImage,
+                                placeholder: (context, url) => Image.asset(
+                                  ImageConstants.defaultImage,
+                                  fit: BoxFit.fitHeight,
+                                ),
+                                errorWidget: (context, url, error) {
+                                  return Image.asset(
+                                    ImageConstants.defaultImage,
+                                    fit: BoxFit.fitHeight,
+                                  );
+                                },
+                                fit: BoxFit.fitHeight,
+                              ),
                             ),
-                          ),
-                        ),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                            colors: [Colors.black, Colors.transparent],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                          )),
+                            Container(
+                              decoration: const BoxDecoration(
+                                  gradient: LinearGradient(
+                                colors: [Colors.black, Colors.transparent],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              )),
+                            ),
+                          ],
                         ),
                       ),
                       Padding(

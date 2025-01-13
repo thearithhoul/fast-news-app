@@ -14,13 +14,12 @@ class TopheadlinesRepository extends BaseRepository {
     int? pageSize,
   }) async {
     try {
-      String quarry = StrHelper.attributesStr({
-        "country": country,
-        "category": category,
-        "q": keyword,
-        "pageSize": pageSize,
-      });
-      final response = await dioClient.get('/top-headlines?$quarry');
+      Map<String, dynamic> param =
+          _qurreyParam(country, category, keyword, pageSize);
+      print(param);
+
+      final response = await dioClient.get('/top-headlines',
+          param: param.isEmpty ? null : param);
       Map<String, dynamic> map = response.data;
       String? status = map['status'];
 
@@ -41,4 +40,28 @@ class TopheadlinesRepository extends BaseRepository {
       return ApiResult.failure(e.toString());
     }
   }
+}
+
+Map<String, dynamic> _qurreyParam(
+  String? country,
+  String? category,
+  String? keyword,
+  int? pageSize,
+) {
+  Map<String, dynamic> map = {};
+
+  if (country != null && country != "") {
+    map['country'] = country;
+  }
+  if (category != null && category != "") {
+    map['category'] = category;
+  }
+  if (keyword != null && keyword != "") {
+    map['q'] = keyword;
+  }
+  if (pageSize != null && pageSize != 0) {
+    map['pageSize'] = pageSize;
+  }
+
+  return map;
 }

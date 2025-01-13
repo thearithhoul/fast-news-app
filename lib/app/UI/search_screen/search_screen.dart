@@ -1,11 +1,15 @@
 import 'package:fast_news_application/Core/Constants/my_text_styte.dart';
+import 'package:fast_news_application/Core/enum/lang_enum.dart';
 import 'package:fast_news_application/app/UI/search_screen/search_provider.dart';
+import 'package:fast_news_application/app/Util/language.dart';
 import 'package:fast_news_application/app/Util/navigation_route.dart';
 import 'package:fast_news_application/app/Util/widget/search_text_box.dart';
+import 'package:fast_news_application/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Core/Constants/icon_constants.dart';
+import '../../../Core/Constants/init_value.dart';
 import '../../Entities/everything_model/everything.dart';
 import '../../Util/route_name.dart';
 import '../../Util/widget/circle_button.dart';
@@ -20,11 +24,28 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  late TextEditingController tecSearch;
+  late FocusNode focusNode;
   @override
   void initState() {
-    Provider.of<SearchProvider>(context, listen: false)
-        .callTopheadLinesNewsWithFilter();
+    focusNode = FocusNode();
+    tecSearch = TextEditingController();
+    focusNode.addListener(
+      () {
+        if (!focusNode.hasFocus) {
+          context.read<SearchProvider>().turnOffHistorySearch();
+        }
+      },
+    );
+    context.read<SearchProvider>().callTopheadLinesNewsWithFilter();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    tecSearch.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,13 +65,13 @@ class _SearchScreenState extends State<SearchScreen> {
       body: SafeArea(
           child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Consumer<SearchProvider>(
-                builder: (context, value, child) {
+              child: Consumer2<SearchProvider, Language>(
+                builder: (context, value, value2, child) {
                   return SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _discorverText(),
+                        _discorverText(context),
                         const SizedBox(
                           height: 12.0,
                         ),
@@ -101,7 +122,21 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ],
                               ),
                             ), // Text Search box
-                            const SearchTextBox(),
+                            SearchTextBox(
+                              tec: tecSearch,
+                              focusNode: focusNode,
+                              histroyList: value.searchHistory,
+                              isshowExtend: value.isShowSearchbox,
+                              onSubmitted: (text) async {
+                                await value.callSearchEverything(
+                                  text,
+                                  language: (value2.localeSelected).langStr,
+                                );
+                              },
+                              onTap: () async {
+                                await value.getSearchHistory();
+                              },
+                            ),
                           ],
                         ),
                         const SizedBox(
@@ -117,21 +152,11 @@ class _SearchScreenState extends State<SearchScreen> {
 }
 
 _tabBarView(SearchProvider provider) {
-  List<String> categorylist = [
-    'All',
-    'Business',
-    'Entertainment',
-    'General',
-    'Health',
-    'Science',
-    'Sports',
-    'Technology',
-  ];
   return SizedBox(
     child: SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: categorylist.map(
+        children: InitValue.categorylist.map(
           (e) {
             return InkWell(
               onTap: () {
@@ -159,20 +184,20 @@ _tabBarView(SearchProvider provider) {
   );
 }
 
-_discorverText() {
+_discorverText(BuildContext context) {
   return Column(
     mainAxisSize: MainAxisSize.min,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
-        'Discover',
+        S.of(context).Discover,
         style: MYTEXTSTYTE.boldRoboto(fontType: FontType.extraLarge),
       ),
       const SizedBox(
         height: 4.0,
       ),
       Text(
-        'News from all around the world',
+        S.of(context).NewsFromAllAroundTheWorld,
         style: MYTEXTSTYTE.lightRoboto(fontType: FontType.lable),
       ),
     ],

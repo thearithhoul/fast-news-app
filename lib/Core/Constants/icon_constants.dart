@@ -13,6 +13,7 @@ class IconConstants {
   static String menuIcon = '${Path.iconPath.assetPath}Hamburger_LG.svg';
   static String backIcon = '${Path.iconPath.assetPath}Chevron_Left.svg';
   static String perosnIcon = '${Path.iconPath.assetPath}User_01.svg';
+  static String languageIcon = '${Path.iconPath.assetPath}Globe.svg';
   static String moreOptionIcon =
       '${Path.iconPath.assetPath}More_Horizontal.svg';
   static String externalLinkIcon =

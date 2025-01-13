@@ -11,11 +11,13 @@ class EverythingUsecase {
     _everythingRepository = EverythingRepository();
   }
 
-  Future<ApiResult<List<Everything>>> call(String search) async {
+  Future<ApiResult<List<Everything>>> call(String search,
+      {String? language}) async {
     ApiResult<List<Everything>> data =
         await _everythingRepository.getEverythingNews(
+      language: language ?? 'en',
       search: search,
-      pageSize: 100,
+      pageSize: 20,
     );
 
     return data.when(

@@ -4,6 +4,7 @@ import 'package:fast_news_application/app/Util/navigation_route.dart';
 import 'package:fast_news_application/app/Util/route_name.dart';
 import 'package:fast_news_application/app/Util/widget/circle_button.dart';
 import 'package:fast_news_application/app/Util/widget/title_widget.dart';
+import 'package:fast_news_application/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     final provider = Provider.of<HomeProvider>(context, listen: false);
-    provider.callEverythingNews();
+    provider.callTopHeadlineNews();
     super.initState();
   }
 
@@ -35,7 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(8.0),
           child: CircleButton(
             svgIcon: IconConstants.menuIcon,
-            onPressed: () {},
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
           ),
         ),
         actions: [
@@ -61,14 +64,14 @@ class _HomeScreenState extends State<HomeScreen> {
               return Column(
                 children: [
                   TitleWidget(
-                    title: 'Breaking News',
+                    title: S.of(context).BreakingNews,
                     ontap: () {},
                   ),
                   NewsSlider(
                     topNews: value.topNews,
                   ),
                   TitleWidget(
-                    title: 'Recommendation',
+                    title: S.of(context).Recommendation,
                     ontap: () {},
                   ),
                   value.resultState.when(
